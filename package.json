@@ -20,6 +20,7 @@
     "react-router-dom": "^5.3.0",
     "react-router-ga": "^1.2.3",
     "react-scripts": "4.0.3",
+    "react-switch": "^7.0.0",
     "react-use": "^17.3.1",
     "web-vitals": "^1.0.1"
   },

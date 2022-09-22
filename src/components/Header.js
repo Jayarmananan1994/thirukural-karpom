@@ -1,12 +1,16 @@
-import { React } from "react"
+import { React, useContext } from "react"
 import Container from "react-bootstrap/Container"
 import Nav from "react-bootstrap/Nav"
 import Navbar from "react-bootstrap/Navbar"
 import NavDropdown from "react-bootstrap/NavDropdown"
+import ReactSwitch from "react-switch"
 import { ABOUT_WEBSITE, APP_NAME, CLASS_SUFFIX, FIND_EXPLANATION, FIND_KURAL, GENERAL, SAMACHEER_EDUCATION } from "../constants"
 import { getClassNumbers } from "../service/Samacheer"
+import { ThemeContext } from "../themes/ThemeContext"
 
 const Header = () => {
+
+  const themeCtx = useContext(ThemeContext);
 
   const renderSamacheerClasses = (route) => {
     return (
@@ -28,7 +32,8 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
+    
+      <Navbar bg={themeCtx.theme.name} variant={themeCtx.theme.name} expand="lg" fixed="top">
         <Container>
           <Navbar.Brand href="/">{APP_NAME}</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -52,6 +57,7 @@ const Header = () => {
                 {ABOUT_WEBSITE}
               </Nav.Link>
             </Nav>
+            <ReactSwitch onChange={()=> themeCtx.toggleTheme()} checked={themeCtx.theme.name==="dark"} uncheckedIcon={false} checkedIcon={false}/>
             <Nav>
               <Nav.Link
                 target="_blank"

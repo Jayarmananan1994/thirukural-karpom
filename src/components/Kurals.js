@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { Badge, Button, Card, Col, Container, Form, Row, Tab, Tabs } from "react-bootstrap"
 import { Typeahead } from "react-bootstrap-typeahead"
 import { useTitle } from "react-use"
@@ -6,12 +6,15 @@ import { ADHIKARAM, APP_NAME, KURAL, KURALS, PAAL, SUBMIT } from "../constants"
 import paals from "../data/paals.json"
 import { log } from "../helpers"
 import { getAdhikarams, getKurals } from "../service/Thirukural"
+import { ThemeContext } from "../themes/ThemeContext"
 
 const Kurals = () => {
   const [selectedPaal, setSelectedPaal] = useState(null);
   const [adhikarams, setAdhikarams] = useState([]);
   const [selectedAdhikaram, setSelectedAdhikaram] = useState(null)
   const [kurals, setKurals] = useState([])
+  const themeCtx = useContext(ThemeContext);
+
 
   useTitle(`${KURALS} | ${APP_NAME}`)
 
@@ -54,16 +57,20 @@ const Kurals = () => {
       setSelectedAdhikaram([adhikarams[0]])
     }
   }
+  
 
-  const renderKurals = () => (
-    kurals.map((k, idx) => (
+  const renderKurals = () => {
+    const cardTheme = themeCtx.theme.name==="dark" ? "dark" :"";
+    const cardText = themeCtx.theme.name==="dark" ? "white" :"dark";
+    const batchtheme =  themeCtx.theme.name==="dark" ? "secondary" :"";
+    return kurals.map((k, idx) => (
       <Row key={idx} className="my-3">
         <Col md={{ span: 8, offset: 2 }}>
-          <Card className="shadow-sm">
+          <Card className="shadow-sm" bg={cardTheme} text={cardText} >
             <Card.Body>
               <Row className="fs-5">
                 <Col >
-                  <Badge bg="primary">{`${KURAL} ${k.kuralNo}`}</Badge>
+                  <Badge bg={batchtheme}>{`${KURAL} ${k.kuralNo}`}</Badge>
                 </Col>
               </Row>
               <Row className="my-3">
@@ -71,7 +78,7 @@ const Kurals = () => {
                   {k.kural}
                 </Col>
               </Row>
-              <Tabs defaultActiveKey="0" className="my-3">
+              <Tabs defaultActiveKey="0" className="my-3" >
                 {k.explanations.map((e, idx) => (<Tab key={idx} eventKey={idx} title={e.author}>{e.explanation}</Tab>))}
               </Tabs>
             </Card.Body>
@@ -79,7 +86,7 @@ const Kurals = () => {
         </Col>
       </Row>
     ))
-  )
+    }
 
   return (
     <Container>
@@ -108,6 +115,7 @@ const Kurals = () => {
                     labelKey={(option) => `${option.no} - ${option.name}`}
                     options={adhikarams}
                     placeholder={ADHIKARAM}
+                    theme="dark"
                     selected={selectedAdhikaram !== null ? selectedAdhikaram : []}
                   />
                 </Form.Group>
@@ -115,7 +123,7 @@ const Kurals = () => {
               <Col md={2}>
                 <Form.Group>
                   <Form.Label>&nbsp;</Form.Label>
-                  <Form.Control as={Button} type="submit">
+                  <Form.Control as={Button} type="submit" variant={themeCtx.theme.name==="dark" ? "dark" : "primary"}>
                     {SUBMIT}
                   </Form.Control>
                 </Form.Group>
